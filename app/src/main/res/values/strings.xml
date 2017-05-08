@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">LightControl</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_to_group">Add to Group</string>
+    <string name="remove_from_group">Remove from Group</string>
+    <string-array name="LightListName">
+        <item>Light 0</item>
+        <item>Light 1</item>
+        <item>Light 2</item>
+        <item>Light 3</item>
+        <item>Light 4</item>
+        <item>Light 5</item>
+        <item>Light 6</item>
+        <item>Light 7</item>
+        <item>Light 8</item>
+        <item>Light 9</item>
+        <item>Light 10</item>
+        <item>Light 11</item>
+    </string-array>
+</resources>
