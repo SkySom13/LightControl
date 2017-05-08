@@ -144,6 +144,10 @@ public class SingleLight extends Fragment implements AdapterView.OnItemClickList
                 dialog.hide();
             case R.id.cncl_btn:
                 dialog.hide();
+            case R.id.save_conf:
+                DataSenderModule.getInstance().sendBroadcastToMainActivity("fragmentChange","lightControl");
+            case R.id.close_conf:
+                DataSenderModule.getInstance().sendBroadcastToMainActivity("fragmentChange","lightControl");
         }
 
     }

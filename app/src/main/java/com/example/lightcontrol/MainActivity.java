@@ -82,14 +82,15 @@ public class MainActivity extends AppCompatActivity {
 
         if(fragment_view.equals("singleLight")){
             fragment = new SingleLight();
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             ft.replace(R.id.fragmentcontainer, fragment);
         }
-        else
+        else if(fragment_view.equals("lightControl"))
         {
             fragment = new LightControl();
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
             ft.replace(R.id.fragmentcontainer,fragment);
         }
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
 
     }
