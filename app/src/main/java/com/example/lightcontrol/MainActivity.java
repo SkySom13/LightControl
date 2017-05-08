@@ -71,17 +71,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void fragmentUpdate(String fragment_view) {
         printLog("fragmentUpdate...");
+
+        printLog("FragmentCount " + fm.getBackStackEntryCount());
+        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            printLog("kill old fragment");
+            fm.popBackStack();
+        }
+
         FragmentTransaction ft = fm.beginTransaction();
-        if(fragment_view.contains("singleLight")){
-            fragment = new com.example.lightcontrol.SingleLight();
+
+        if(fragment_view.equals("singleLight")){
+            fragment = new SingleLight();
             ft.replace(R.id.fragmentcontainer, fragment);
         }
         else
         {
-            fragment = new com.example.lightcontrol.LightControl();
+            fragment = new LightControl();
             ft.replace(R.id.fragmentcontainer,fragment);
         }
-        
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
 
     }
