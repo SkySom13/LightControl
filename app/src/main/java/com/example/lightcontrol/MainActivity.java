@@ -73,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
         printLog("fragmentUpdate...");
         FragmentTransaction ft = fm.beginTransaction();
         if(fragment_view.contains("longtap")){
-            //TODO: Need to add the other fragment 
+            //TODO: Need to add the other fragment
+            fragment = new SingleLight();
             ft.replace(R.id.fragmentcontainer, fragment);
         }
         else
