@@ -72,14 +72,13 @@ public class MainActivity extends AppCompatActivity {
     private void fragmentUpdate(String fragment_view) {
         printLog("fragmentUpdate...");
         FragmentTransaction ft = fm.beginTransaction();
-        if(fragment_view.contains("longtap")){
-            //TODO: Need to add the other fragment
-            fragment = new SingleLight();
+        if(fragment_view.contains("singleLight")){
+            fragment = new com.example.lightcontrol.SingleLight();
             ft.replace(R.id.fragmentcontainer, fragment);
         }
         else
         {
-            fragment = new LightControl();
+            fragment = new com.example.lightcontrol.LightControl();
             ft.replace(R.id.fragmentcontainer,fragment);
         }
         
@@ -116,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     printLog("Got Key: " + key);
                     printLog("Got Command: " + cmd);
                     
-                    if(key.contains("Fragment")){
+                    if(key.contains("fragmentChange")){
                         fragmentkey = cmd;
                     }
 
