@@ -23,7 +23,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SingleLight extends Fragment implements AdapterView.OnItemClickListener, Button.OnClickListener, Switch.OnCheckedChangeListener{
+public class SingleLight extends Fragment implements AdapterView.OnItemClickListener, Button.OnClickListener, Switch.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener{
 
     private final String EVENT_RECV_KEY = "SingleLight";
     private EventReceiver eventReceiver;
@@ -32,6 +32,9 @@ public class SingleLight extends Fragment implements AdapterView.OnItemClickList
     private LightListAdapter mAdapter;
 
     private SeekBar mySeekBar;
+    private TextView LightLevelStatus;
+    private int lightprogress;
+
     private Dialog dialog;
     private EditText mylightEdit;
     private Button saveBTN, cancelBTN;
@@ -89,6 +92,8 @@ public class SingleLight extends Fragment implements AdapterView.OnItemClickList
         //myGroupList.setAdapter(R.id.);
         myGroupList.setOnItemClickListener(this);
 
+        mySeekBar = (SeekBar)view.findViewById(R.id.seekBar);
+        LightLevelStatus = (TextView)view.findViewById(R.id.lightleveldisplay);
 
         dialog = new Dialog(getContext());
         dialog.setTitle("Light Configuration");
@@ -163,6 +168,24 @@ public class SingleLight extends Fragment implements AdapterView.OnItemClickList
             //TcpClientModule.getInstance().sendDataToServer("set light "+ Integer.toString(addr) + " = 0");
             Toast.makeText(getActivity(),"Light OFF",Toast.LENGTH_SHORT).show();
         }
+    }
+    //------------------------------------------------------------------------
+    /** THESE THREE FUNCTIONS BELOW ARE FOR SEEKBAR PROGRESS**/
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        lightprogress = progress;
+        LightLevelStatus.setText("Light Level: "+progress+"%");
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        LightLevelStatus.setText("Light Level: "+lightprogress+"%");
     }
     //------------------------------------------------------------------------
 
