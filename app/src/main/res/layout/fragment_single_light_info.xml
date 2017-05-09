@@ -115,7 +115,8 @@
             <TableRow
                 android:id="@+id/light_name_edit"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_margin="10dp">
 
                 <TextView
                     android:id="@+id/textView5"
@@ -127,9 +128,10 @@
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/editLightName"
+                    android:id="@+id/editLightNameDialogOpen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:text="Edit" />
 
@@ -138,11 +140,12 @@
             <TableRow
                 android:id="@+id/light_level_edit"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_margin="10dp">
 
                 <SeekBar
                     android:id="@+id/seekBar"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="3" />
 
@@ -150,6 +153,7 @@
                     android:id="@+id/lightleveldisplay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Light Level"
                     android:textSize="18sp" />
             </TableRow>

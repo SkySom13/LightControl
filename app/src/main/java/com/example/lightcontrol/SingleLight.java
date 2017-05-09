@@ -23,13 +23,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SingleLight extends Fragment implements AdapterView.OnItemClickListener, Button.OnClickListener, Switch.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener{
+public class SingleLight extends Fragment implements Button.OnClickListener, Switch.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener{
 
     private final String EVENT_RECV_KEY = "SingleLight";
     private EventReceiver eventReceiver;
 
-    private ListView myGroupList;
-    private LightListAdapter mAdapter;
+    //private ListView myGroupList;
+    //private LightListAdapter mAdapter;
 
     private SeekBar mySeekBar;
     private TextView LightLevelStatus;
@@ -37,7 +37,7 @@ public class SingleLight extends Fragment implements AdapterView.OnItemClickList
 
     private Dialog dialog;
     private EditText mylightEdit;
-    private Button saveBTN, cancelBTN;
+    private Button saveDialog, cancelDialog, saveConf, closeConf, EditButton;
     private int myPos;
 
     private View rootView;
@@ -58,7 +58,7 @@ public class SingleLight extends Fragment implements AdapterView.OnItemClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        rootView = inflater.inflate(R.layout.fragment_lightcontrol, container, false);
+        rootView = inflater.inflate(R.layout.fragment_single_light_info, container, false);
 
         guiInit(rootView);
 
@@ -86,11 +86,11 @@ public class SingleLight extends Fragment implements AdapterView.OnItemClickList
     private void guiInit(View view){
         printLog("guiInit...");
 
-        myGroupList = (ListView)view.findViewById(R.id.groupListView);
-        mAdapter = new LightListAdapter(getContext());
+        //myGroupList = (ListView)view.findViewById(R.id.groupListView);
+        //mAdapter = new LightListAdapter(getContext());
         //TODO: Set adapter to the Group ListView
         //myGroupList.setAdapter(R.id.);
-        myGroupList.setOnItemClickListener(this);
+        //myGroupList.setOnItemClickListener(this);
 
         mySeekBar = (SeekBar)view.findViewById(R.id.seekBar);
         LightLevelStatus = (TextView)view.findViewById(R.id.lightleveldisplay);
@@ -102,11 +102,17 @@ public class SingleLight extends Fragment implements AdapterView.OnItemClickList
         mylightEdit.setHint("Enter Light Name here!");
 
 
-        saveBTN =(Button) dialog.findViewById(R.id.sv_btn);
-        cancelBTN = (Button) dialog.findViewById(R.id.cncl_btn);
-        saveBTN.setOnClickListener(this);
-        cancelBTN.setOnClickListener(this);
+        saveDialog =(Button) dialog.findViewById(R.id.sv_btn);
+        cancelDialog = (Button) dialog.findViewById(R.id.cncl_btn);
+        saveConf = (Button) view.findViewById(R.id.save_conf);
+        closeConf = (Button) view.findViewById(R.id.close_conf);
+        EditButton = (Button) view.findViewById(R.id.editLightNameDialogOpen);
 
+        saveDialog.setOnClickListener(this);
+        cancelDialog.setOnClickListener(this);
+        saveConf.setOnClickListener(this);
+        closeConf.setOnClickListener(this);
+        EditButton.setOnClickListener(this);
     }
 
     //------------------------------------------------------------------------
@@ -125,13 +131,13 @@ public class SingleLight extends Fragment implements AdapterView.OnItemClickList
         super.onDestroy();
     }
     //------------------------------------------------------------------------
-    @Override
-    /** THIS FUNCTION IS FOR LISTVIEW PRESSES**/
+    /**@Override
+    /** THIS FUNCTION IS FOR LISTVIEW PRESSES
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         printLog("Press Successful!!!!!!!!!!!!!!!!!!!!!!!");
         myPos = position;
         Toast.makeText(getContext(), "It will go to Group "+position,Toast.LENGTH_SHORT).show();
-    }
+    }*/
     //------------------------------------------------------------------------
     @Override
     /** THIS FUNCTION IS ONLY FOR BUTTON PRESSES**/
@@ -141,7 +147,7 @@ public class SingleLight extends Fragment implements AdapterView.OnItemClickList
                 Toast.makeText(getContext(), "Added to Group", Toast.LENGTH_SHORT).show();
             case R.id.group_remove:
                 Toast.makeText(getContext(), "Removed from Group", Toast.LENGTH_SHORT).show();
-            case R.id.editLightName:
+            case R.id.editLightNameDialogOpen:
                 dialog.show();
             case R.id.sv_btn:
                 LightListAdapter.lightListName.set(myPos, String.valueOf(mylightEdit.getText()+ " ("+myPos+")"));

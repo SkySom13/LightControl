@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private EventReceiver eventReceiver;
     Fragment fragment;
     FragmentManager fm;
-    private String fragmentkey;
+    FragmentTransaction ft;
 
     /*******************************************************
      *          OnCreate Method (Creates the App)
@@ -37,7 +37,10 @@ public class MainActivity extends AppCompatActivity {
         init();
         /* Putting Fragment Part in MainActivity Frame*/
         fm = getSupportFragmentManager();
-        fragmentUpdate(fragmentkey);
+        fragment = new LightControl();
+        ft = fm.beginTransaction();
+        ft.replace(R.id.fragmentcontainer,fragment);
+        ft.commit();
     }
 
     /***********************************************************
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             fm.popBackStack();
         }
 
-        FragmentTransaction ft = fm.beginTransaction();
+        ft = fm.beginTransaction();
 
         if(fragment_view.equals("singleLight")){
             fragment = new SingleLight();
@@ -125,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     printLog("Got Command: " + cmd);
                     
                     if(key.contains("fragmentChange")){
-                        fragmentkey = cmd;
+                        fragmentUpdate(cmd);
                     }
 
 
