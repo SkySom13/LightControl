@@ -13,7 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.util.ArrayList;
+import com.example.lightcontrol.Fragments.LightControl;
+import com.example.lightcontrol.Fragments.SingleLight;
 
 public class MainActivity extends AppCompatActivity {
 

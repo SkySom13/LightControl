@@ -1,4 +1,4 @@
-package com.example.lightcontrol;
+package com.example.lightcontrol.Fragments;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -15,29 +15,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SingleLight extends Fragment implements Button.OnClickListener, Switch.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener{
+import com.example.lightcontrol.DataSenderModule;
+import com.example.lightcontrol.LightListAdapter;
+import com.example.lightcontrol.R;
+import com.example.lightcontrol.TcpClientModule;
 
-    private final String EVENT_RECV_KEY = "SingleLight";
+public class LightControl extends Fragment implements AdapterView.OnItemLongClickListener, Button.OnClickListener{
+
+    private final String EVENT_RECV_KEY = "LightControl";
     private EventReceiver eventReceiver;
 
-    //private ListView myGroupList;
-    //private LightListAdapter mAdapter;
-
-    private SeekBar mySeekBar;
-    private TextView LightLevelStatus;
-    private int lightprogress;
+    private ListView myLightList;
+    private LightListAdapter mAdapter;
 
     private Dialog dialog;
     private EditText mylightEdit;
-    private Button saveDialog, cancelDialog, saveConf, closeConf, EditButton;
+    private Button saveBTN, cancelBTN;
     private int myPos;
 
     private View rootView;
@@ -58,7 +56,7 @@ public class SingleLight extends Fragment implements Button.OnClickListener, Swi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        rootView = inflater.inflate(R.layout.fragment_single_light_info, container, false);
+        rootView = inflater.inflate(R.layout.fragment_lightcontrol, container, false);
 
         guiInit(rootView);
 
@@ -86,14 +84,11 @@ public class SingleLight extends Fragment implements Button.OnClickListener, Swi
     private void guiInit(View view){
         printLog("guiInit...");
 
-        //myGroupList = (ListView)view.findViewById(R.id.groupListView);
-        //mAdapter = new LightListAdapter(getContext());
-        //TODO: Set adapter to the Group ListView
-        //myGroupList.setAdapter(R.id.);
-        //myGroupList.setOnItemClickListener(this);
+        myLightList = (ListView)view.findViewById(R.id.lightControlList);
+        mAdapter = new LightListAdapter(getContext());
+        myLightList.setAdapter(mAdapter);
+        myLightList.setOnItemLongClickListener(this);
 
-        mySeekBar = (SeekBar)view.findViewById(R.id.seekBar);
-        LightLevelStatus = (TextView)view.findViewById(R.id.lightleveldisplay);
 
         dialog = new Dialog(getContext());
         dialog.setTitle("Light Configuration");
@@ -102,17 +97,11 @@ public class SingleLight extends Fragment implements Button.OnClickListener, Swi
         mylightEdit.setHint("Enter Light Name here!");
 
 
-        saveDialog =(Button) dialog.findViewById(R.id.sv_btn);
-        cancelDialog = (Button) dialog.findViewById(R.id.cncl_btn);
-        saveConf = (Button) view.findViewById(R.id.save_conf);
-        closeConf = (Button) view.findViewById(R.id.close_conf);
-        EditButton = (Button) view.findViewById(R.id.editLightNameDialogOpen);
+        saveBTN =(Button) dialog.findViewById(R.id.sv_btn);
+        cancelBTN = (Button) dialog.findViewById(R.id.cncl_btn);
+        saveBTN.setOnClickListener(this);
+        cancelBTN.setOnClickListener(this);
 
-        saveDialog.setOnClickListener(this);
-        cancelDialog.setOnClickListener(this);
-        saveConf.setOnClickListener(this);
-        closeConf.setOnClickListener(this);
-        EditButton.setOnClickListener(this);
     }
 
     //------------------------------------------------------------------------
@@ -131,73 +120,37 @@ public class SingleLight extends Fragment implements Button.OnClickListener, Swi
         super.onDestroy();
     }
     //------------------------------------------------------------------------
-    /**@Override
-    /** THIS FUNCTION IS FOR LISTVIEW PRESSES
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        printLog("Press Successful!!!!!!!!!!!!!!!!!!!!!!!");
+    @Override
+    /** THIS FUNCTION IS FOR LISTVIEW PRESSES**/
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        printLog("LongPress Successful!!!!!!!!!!!!!!!!!!!!!!!");
         myPos = position;
-        Toast.makeText(getContext(), "It will go to Group "+position,Toast.LENGTH_SHORT).show();
-    }*/
+        DataSenderModule.getInstance().sendBroadcastToSingleLight("position",String.valueOf(position));
+        DataSenderModule.getInstance().sendBroadcastToMainActivity("fragmentChange","singleLight");
+        return false;
+    }
     //------------------------------------------------------------------------
     @Override
     /** THIS FUNCTION IS ONLY FOR BUTTON PRESSES**/
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.group_add:
-                Toast.makeText(getContext(), "Added to Group", Toast.LENGTH_SHORT).show();
-            case R.id.group_remove:
-                Toast.makeText(getContext(), "Removed from Group", Toast.LENGTH_SHORT).show();
-            case R.id.editLightNameDialogOpen:
-                dialog.show();
             case R.id.sv_btn:
                 LightListAdapter.lightListName.set(myPos, String.valueOf(mylightEdit.getText()+ " ("+myPos+")"));
                 mylightEdit.setText("");
                 dialog.hide();
             case R.id.cncl_btn:
                 dialog.hide();
-            case R.id.save_conf:
-                DataSenderModule.getInstance().sendBroadcastToMainActivity("fragmentChange","lightControl");
-            case R.id.close_conf:
-                DataSenderModule.getInstance().sendBroadcastToMainActivity("fragmentChange","lightControl");
         }
 
     }
-    //------------------------------------------------------------------------
-    @Override
-    /** THIS FUNCTION IS ONLY FOR SWITCH PRESSES**/
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(isChecked){
-            //TcpClientModule.getInstance().sendDataToServer("set light " + Integer.toString(addr) + " = 254");
-            Toast.makeText(getActivity(),"Light ON",Toast.LENGTH_SHORT).show();
-        }
-        else{
-            //TcpClientModule.getInstance().sendDataToServer("set light "+ Integer.toString(addr) + " = 0");
-            Toast.makeText(getActivity(),"Light OFF",Toast.LENGTH_SHORT).show();
-        }
-    }
-    //------------------------------------------------------------------------
-    /** THESE THREE FUNCTIONS BELOW ARE FOR SEEKBAR PROGRESS**/
 
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        lightprogress = progress;
-        LightLevelStatus.setText("Light Level: "+progress+"%");
-    }
 
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        LightLevelStatus.setText("Light Level: "+lightprogress+"%");
-    }
     //------------------------------------------------------------------------
 
     private class EventReceiver extends BroadcastReceiver {
 
         private final Handler handler;
+        private int addr;
 
         public EventReceiver(Handler handler) {
             this.handler = handler;
@@ -215,6 +168,21 @@ public class SingleLight extends Fragment implements Button.OnClickListener, Swi
 
                     printLog("Got Key: " + key);
                     printLog("Got Command: " + cmd);
+
+                    if(key.contains("Address")){
+                        addr = Integer.parseInt(cmd);
+                    }
+
+                    if(key.contains("State")){
+                        if(cmd.contains("on")){
+                            TcpClientModule.getInstance().sendDataToServer("set light " + Integer.toString(addr) + " = 254");
+                            Toast.makeText(getActivity(),"Light "+addr+" ON",Toast.LENGTH_SHORT).show();
+                        }
+                        if(cmd.contains("off")){
+                            TcpClientModule.getInstance().sendDataToServer("set light "+ Integer.toString(addr) + " = 0");
+                            Toast.makeText(getActivity(),"Light "+addr+" OFF",Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
 
                 }
